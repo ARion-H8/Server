@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -9,7 +10,7 @@ const { makeExecutableSchema } = require('graphql-tools')
 const jwt = require('express-jwt');
 const cors = require('cors');
 
-const typeDefs = fs.readFileSync('./graphql/typeDefs','utf-8');
+const typeDefs = fs.readFileSync('./graphql/typeDefs.gql','utf-8');
 const resolvers = require('./graphql/resolvers')
 const mongoose = require('mongoose');
 
@@ -18,20 +19,21 @@ var usersRouter = require('./routes/users');
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 var app = express();
+
+require('dotenv')
 app.use('*', cors());
 
 
 const username = process.env.USERNAME
 const password = process.env.PASSWORD
-const secret = process.env.SECRET
 const db = mongoose.connection
 
 const auth = jwt({
-  secret,
+  secret: process.env.SECRET,
   credentialsRequired: false
 })
 
-mongoose.connect(`mongodb://${username}:${password}@ds213199.mlab.com:13199/arion-db`)
+mongoose.connect(`mongodb://${process.env.USERNAME}:${password}@ds213199.mlab.com:13199/arion-db`)
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log('connected to mongoose')
