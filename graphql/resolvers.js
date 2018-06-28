@@ -1,10 +1,10 @@
-const User = require('../models/user.models')
+const User = require('../models/user.model')
 const Product = require('../models/product.model')
 const Transaction = require('../models/transaction.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const resolvers = {
+var resolvers = {
   Query: {
     user: async (_, args, { user }) => {
       if (!user) {

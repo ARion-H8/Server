@@ -1,4 +1,3 @@
-const typeDefs = 
   type User {
     _id: String
     username: String
@@ -50,6 +49,6 @@ const typeDefs =
   }
 
   input newTransaction {
-    productId: Product
+    productId: String
     quantity: Int
   }
