@@ -57,6 +57,29 @@ var resolvers = {
         return 'Sign In Failed'
       }
     },
+    addProduct: async(_, { newProduct }, { user }) => {
+      if (!user) throw new Error("please login first")
+      let product = await Product.create(newProduct)
+      return product
+    },
+    editProduct: async(_, { productId, name, price, image}, { user }) => {
+      if (!user) throw new Error("please login first")
+      let editProduct = await Product.findByIdAndUpdate(productId,{
+        name,
+        price,
+        image
+      })
+      return {
+        name,
+        price,
+        image
+      }
+    },
+    deleteProduct: async(_, { productId }, { user }) => {
+      if (!user) throw new Error("please login first")
+      let product = await Product.findByIdAndRemove(productId)
+      return product
+    }
   }
 }
 
