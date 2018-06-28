@@ -1,28 +1,42 @@
-const User = require('../models/user.model')
+const User = require('../models/user.models')
+const Product = require('../models/product.model')
+const Transaction = require('../models/transaction.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 const resolvers = {
   Query: {
     user: async (_, args, { user }) => {
+      if (!user) {
+        throw new Error("please login first")
+      }
       let isUser = await User.findById(user._id)
       return isUser
+    },
+    products: async (_, args, { user }) => {
+      if (!user) throw new Error("please login first")
+      let products = await Product.find()
+      return products
+    },
+    transactions: async (_, args, { user }) => {
+      if (!user) throw new Error("please login first")
+      let transactions = await Transaction.find({
+        userId: user._id
+      })
+      return transactions
     }
   },
   Mutation: {
     signUp: async(_, { newUser }) => {
-      // console.log('input user', newUser)
       try {
         const user = await User.create(newUser)
-        // console.log("user data ===> ", user )
         return user
       } catch (err) {
         console.log(err)
       }
     },
-    signIn: async(_, { email, password }) => {
-      let salt = bcrypt.genSaltSync()
-      let user = await User.findOne({email})
+    signIn: async (_, { email, password }) => {
+      let user = await User.findOne({ email })
       let token;
       let isUser = bcrypt.compareSync(password, user.password)
       if (isUser) {
@@ -42,7 +56,7 @@ const resolvers = {
       } else {
         return 'Sign In Failed'
       }
-    }
+    },
   }
 }
 

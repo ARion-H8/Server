@@ -1,26 +1,35 @@
-require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const fs = require('fs')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 const { makeExecutableSchema } = require('graphql-tools')
-const mongoose = require('mongoose')
-const fs = require('fs')
+const jwt = require('express-jwt');
+const cors = require('cors');
+
+const typeDefs = fs.readFileSync('./graphql/typeDefs','utf-8');
+const resolvers = require('./graphql/resolvers')
+const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var app = express();
-
-const typeDefs = fs.readFileSync('./graphql/typeDefs.gql', 'utf-8')
-const resolvers = require('./graphql/resolvers.js')
 const schema = makeExecutableSchema({ typeDefs, resolvers })
+var app = express();
+app.use('*', cors());
+
 
 const username = process.env.USERNAME
 const password = process.env.PASSWORD
+const secret = process.env.SECRET
 const db = mongoose.connection
+
+const auth = jwt({
+  secret,
+  credentialsRequired: false
+})
 
 mongoose.connect(`mongodb://${username}:${password}@ds213199.mlab.com:13199/arion-db`)
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -41,7 +50,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.use('/graphql', graphqlExpress({ schema: schema }))
+app.use('/graphql', graphqlExpress(req => {
+  return {
+    schema,
+    context: {
+      user: req.user
+    }
+  }
+}));
+
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 
 // catch 404 and forward to error handler
