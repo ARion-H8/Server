@@ -1,22 +1,55 @@
-type User {
-  _id: String
-  username: String
-  password: String
-  email: String
-  token: String
-}
+const typeDefs = 
+  type User {
+    _id: String
+    username: String
+    password: String
+    email: String
+    token: String
+  }
 
-type Query {
-  user: User
-}
+  type Product {
+    _id: String
+    name: String
+    price: Int
+    image: String
+    transactions: [Transaction]
+  }
 
-type Mutation {
-  signUp(newUser: newUser): User
-  signIn(email: String, password: String): User
-}
+  type Transaction {
+    _id: String
+    userId: User
+    productId: Product
+    quantity: Int
+  }
 
-input newUser {
-  username: String
-  email: String
-  password: String
-}
+  type Query {
+    user: User
+    transactions: [Transaction]
+    products: [Product]
+  }
+
+  type Mutation {
+    signUp(newUser: newUser): User
+    signIn(email: String, password: String): User
+    addProduct(newProduct: newProduct): Product
+    deleteProduct(productId: String): Product
+    editProduct(productId: String, name: String, price: String, image: String): Product
+    addTransaction(newTransaction: newTransaction): Transaction
+  }
+
+  input newUser {
+    username: String
+    email: String
+    password: String
+  }
+
+  input newProduct {
+    name: String
+    price: Int
+    image: String
+  }
+
+  input newTransaction {
+    productId: Product
+    quantity: Int
+  }
