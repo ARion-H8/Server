@@ -52,7 +52,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.use('/graphql', graphqlExpress(req => {
+
+app.use('/graphql', auth,graphqlExpress(req => {
   return {
     schema,
     context: {
