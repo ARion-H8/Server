@@ -9,6 +9,7 @@ const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 const { makeExecutableSchema } = require('graphql-tools')
 const jwt = require('express-jwt');
 const cors = require('cors');
+const images = require('./helpers/images')
 
 const typeDefs = fs.readFileSync('./graphql/typeDefs.gql','utf-8');
 const resolvers = require('./graphql/resolvers')
@@ -51,6 +52,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.post('/upload',
+  images.multer.single('image'),
+  images.sendUploadToGCS,
+  (req, res) => {
+    res.send({
+      status: 200,
+      message: 'Your file is successfully uploaded',
+      link: req.file.cloudStoragePublicUrl
+    })
+  }
+)
 
 
 app.use('/graphql', auth,graphqlExpress(req => {
