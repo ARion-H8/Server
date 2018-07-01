@@ -22,7 +22,10 @@ const usersSchema = new Schema ({
   password: {
     type: String,
     require: [true, 'Please input your password']
-  }
+  },
+  cart: [{
+    type: Schema.Types.ObjectId, ref: 'Cart',
+  }],
 }, {
   timestamps: true
 })
