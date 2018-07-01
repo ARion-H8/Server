@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "project-for-study-at-hacktiv8",
+  "private_key_id": "f3b65125276772a5bcb36b45eb6c8afeb144b718",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDXVI65ODHFOf89\nF7FxV6cjUhNWn97tZhWZ0Apij4KUSDnf9a+R0AjtJ50q5I7swdARXa3NXsLzt2r6\ndoKEJi8ctsDIButY67L+M/ZDWqaGjeylCl6s1zhs0XNmZRQP6IsOr7qdV2y7Dvgd\nZJQwLPsuLNdmQ3xpU5DkZP3LkxV4BfE2mdCH89Bd7a3zyVbW1aBa0O1dlLPM04wf\nkFceL/5JxX8JOtAHOYNhfadye5qYhHQHlVn4RowLq0u9Bd+z6MB9pcNO2ivdFHNe\nhIzCpVb6mC3h8GKB9BfeIF3JcnuxS7MVvSfEo8zSf7yVqJlDJzZTtYSZmSPKQQXa\nIe9tTWWLAgMBAAECggEAAsZ+uzye4gCWdxmdxyzoWEhMooJ+AGGFjsCqAACchllZ\nKzdPjRmsbvribjT/vv9CgmH90jAeyb7H9k5Eh8jpAfEJeN29Kjcjf/fe4s0oAoNd\n+14v8s3CI7jq+8HHj+rt4k5Gh/rVlm87dT/tUjxwlY6tAHVUBOGEWquoj8RBQK8N\nqk2TbTUfZJlm3IKxNgbCiz76ne5gHeDPOrDSRj9qH2p2ajPfyOjINriMnrIfWJWm\nptlpiwtOaf63Atbzkrs94xoldO2b5uAIYzQL4Aqio1bVBEaH+Tw2OQIaMGQuqZdl\n+DXBdrEkJujrJKlCDqkZErRKdjK/pUmMEpPxyrvzYQKBgQD1KFeHlZ0dT3pdG+Vb\nrk/aBsS/Q+ixGDUTLEO9rdrRYCz6vUWf8PPbT+T4OurMVrTiK+7CvK2SXvI0Ltwy\nDZxgEZI7S2Lw469f0G8PG9+52rkHk98T5SZRRJhaKQ5kKpAmagVRc+3tS5wD44CF\nwgDUnZPB7szMgAQCeB0TPONkqwKBgQDg2oNYIqHrmhrc2y1/l7Iu0t+zgccHkZOe\n1WbLfAENoHhpqvEpLp5L4AanoHGrCeVhJ7szmQxVvu2z1HxKT0iVLDXKTUXSTMnE\nK8oQbhhq6gafSWLJZRMKBqCnfw/5h92oATxYf4CccWF6VMBM/ZJ5pyvc4r24SmRd\nBbMpoQVCoQKBgFj8J6lDGSBGdPfO5FV+0+Ujh86U66U8UCeBbaUvsblF2423ncoM\nP7dfLJEdcZRx9H4TzDpLGgWDCQ7/41UXs6b7OcTj/CnLuyBgG6+0QmTHi1nAxrwF\n9P6Sk2pGdL7O5DvNR9jk53u2cg7HSSND4+FIwRUnhJbF8K6kwoj1FOS5AoGAYITs\nBJU5NE0+Yrei3DZdwkO6yu9WZCVVXMT2Dzr3qMXNam56ftcIFEHiGWqB4I2q7P2F\nGi0EYnpGxv7bK3rFCWOk42YwJonXwmGZp1vbF2nF1fJGeXTtq0wVAlFEpjRwLYH6\nSXLR3lW9JinjMilXCul7pqGeFtG4K0YbFi+MdoECgYEAt7TXtD2LsmGnI/6KaYZo\npRM1LOkjZDoBBjo63XjAX9wXf1aVPevzl5ZfuXnESNSX7uiojTC34UyTwnmsnqGk\nRAY5ZJ+49T+tAJz/wN/ZRCbj3hkSdq3mJPqDZSDLpb8neA46O1DjDtKLsi5Nf6Ef\nC7pwmx9WgsgJjZujukUxUX4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "coba-776@project-for-study-at-hacktiv8.iam.gserviceaccount.com",
+  "client_id": "103426841838041819694",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/coba-776%40project-for-study-at-hacktiv8.iam.gserviceaccount.com"
+}
