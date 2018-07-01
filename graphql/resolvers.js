@@ -105,13 +105,10 @@ var resolvers = {
       })
       return edittedCart
     },
-    deleteCart: async (_, { cartId }, { user }) => {
+    deleteCart: async (_, args, { user }) => {
       if (!user) throw new Error("please login first")
-      let cart = await Cart.findByIdAndRemove(cartId)
       await User.findByIdAndUpdate(user._id, {
-        $pop: {
-          cart: cart._id
-        }
+        cart: []
       })
       return cart
     },
