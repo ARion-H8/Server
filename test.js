@@ -1,34 +1,81 @@
-const chai = require('chai')
-const expect = chai.expect;
-const chaiGraphQL = require('chai-graphql')
-const app = require('./app')
-chai.use(chaiGraphQL)
+const {
+  makeExecutableSchema,
+  addMockFunctionsToSchema,
+  mockServer
+} = require('graphql-tools');
 
-const graphql = require('graphql');
-
-var goodResponse = {
-  data: {
-    foo: 'bar'
-  }
+const typeDefs = `
+type User {
+  _id: String
+  username: String
+  password: String
+  email: String
+  token: String
 }
 
-// Passes
-assert.graphQL(goodResponse, { foo: 'bar' })
+type Query {
+  user: User
+}
 
-// export default new graphql.GraphQLObjectType({
-// name : 'User',
-//  fields : {
-//      _id : {
-//          type : graphql.GraphQLString
-//      },
-//      username:{
-//          type: graphql.GraphQLString
-//      },
-//      email : {
-//          type : graphql.GraphQLString
-//      },
-//      name : {
-//       type : graphql.GraphQLString
-//     },
-//   }
-// });
+type Mutation {
+  signUp(newUser: newUser): User
+  signIn(email: String, password: String): User
+}
+
+input newUser {
+  username: String
+  email: String
+  password: String
+}`
+
+const testCaseA = {
+  id: 'Test case A',
+  query: `
+    query {
+      animals {
+         origin
+      }
+    }
+  `,
+  variables: { },
+  context: { },
+  expected: { data: { animals: [{ kind: 'Dog' }] } }
+};
+
+describe('Schema', () => {
+  // Array of case types
+  const cases = [testCaseA];
+  
+  const mockSchema = makeExecutableSchema({ typeDefs });
+
+  // Here we specify the return payloads of mocked types
+  addMockFunctionsToSchema({
+    schema: mockSchema,
+    mocks: {
+      Boolean: () => false,
+      ID: () => '1',
+      Int: () => 1,
+      Float: () => 12.34,
+      String: () => 'Dog',
+    }
+  });
+
+  test('has valid type definitions', async () => {
+    expect(async () => {
+      const MockServer = mockServer(typeDefs);
+
+      await MockServer.query(`{ __schema { types { name } } }`);
+    }).not.toThrow();
+  });
+
+  cases.forEach(obj => {
+    const { id, query, variables, context: ctx, expected } = obj;
+
+    test(`query: ${id}`, async () => {
+      return await expect(
+        graphql(mockSchema, query, null, { ctx }, variables)
+      ).resolves.toEqual(expected);
+    });
+  });
+
+});
