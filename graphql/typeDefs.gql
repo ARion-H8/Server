@@ -20,6 +20,9 @@
     price: Int
     image: String
     transactions: [Transaction]
+    obj_name: String
+    obj_url: String
+    texture_url: String
   }
 
   type Transaction {
@@ -57,6 +60,9 @@
     name: String
     price: Int
     image: String
+    obj_name: String
+    obj_url: String
+    texture_url: String
   }
 
   input newCartItem {
