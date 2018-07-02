@@ -1,38 +1,72 @@
-const chai     = require('chai');
+const chai = require('chai');
 const chaiHttp = require('chai-http');
-const expect   = chai.expect;
-const app      = require('../app');
+const expect = chai.expect;
+const app = require('../app');
 chai.use(chaiHttp);
 
-const email = 'hacktiv8@gmail.com';
+const email = 'test@mail.com';
 const password = 'hacktiv8';
-var token = '';
-const newUser= {
-  username: "rey",
-  email: "rey@gmail.com",
-  password: "hacktiv8"
+var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjNhMzczZGRhNDFlMzJiYTExMjY4NjYiLCJlbWFpbCI6InRlc3RAbWFpbC5jb20iLCJpYXQiOjE1MzA1NDE5NTl9.uwWehqRa9OKFxekqzZx1aQKgaWr0A5LSMYajV9ERayw';
+const product = {
+  name: "Pith Helmet",
+  obj_name: "hat",
+  price: 100000,
+  image: "https://storage.googleapis.com/storagetestupload/1530519614228hat.png",
+  obj_url: "https://storage.googleapis.com/storagetestupload/1530519500150pith_helmet.obj",
+  texture_url: "https://storage.googleapis.com/storagetestupload/1530519478247pith_helmet_spec.jpg"
 }
 
-describe('product test', () => {
+var productId = ''
 
-  it('register user', (done) => {
+describe('product resolvers', () => {
+  it('should succes to login and get token', (done) => {
     chai.request(app)
       .post('/graphql')
-      .set('Authorization', `Bearer ${ token }` )
       .send({
-        query:`
+        query: `
+          mutation {
+            signIn(email: "${email}", password: "${password}"){
+              _id
+              email
+              password
+              email
+              token
+            }
+          }
+        `
+      })
+      .end((err, res) => {
+        if(err){
+          throw err;
+        };
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('object');
+        token = res.body.data.signIn.token
+        done();
+      });
+  });
+
+  it('show products', (done) => {
+    chai.request(app)
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
         query {
-          products{
+          products {
             _id
             name
             price
             image
+            obj_url
+            obj_name
+            texture_url
           }
         }
         `
       })
       .end((err, res) => {
-        if(err) {
+        if (err) {
           throw err;
         };
         expect(res.status).to.be.equal(200);
@@ -41,202 +75,83 @@ describe('product test', () => {
       });
   });
 
-  
+  it('failed add product', (done) => {
+    chai.request(app)
+      .post('/graphql')
+      .send({
+        query: `
+        mutation {
+          addProduct(newProduct: {
+            price: ${product.price}
+            image: ${product.image}
+            obj_name: ${product.obj_name}
+            obj_url: ${product.obj_url}
+            texture_url: ${product.texture_url}
+          }) {
+            _id
+          }
+        }
+        `
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.errors).to.be.an('array');
+        done();
+      });
+  })
 
+  it('success add product', (done) => {
+    chai.request(app)
+      .post('/graphql')
+      .send({
+        query: `
+        mutation {
+          addProduct(newProduct: {
+            name: "${product.name}",
+            price: ${product.price},
+            image: "${product.image}",
+            obj_name: "${product.obj_name}",
+            obj_url: "${product.obj_url}",
+            texture_url: "${product.texture_url}"
+          }) {
+            _id
+          }
+        }
+        `
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('object');
+        done();
+      });
+  })
 
-  // it('authentication user', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         query{
-  //           user(token: "${token}"){
-  //             full_name
-  //             username
-  //             email
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.status).to.be.equal(200);
-  //       expect(res.body.data).to.be.an('object');
-  //       done();
-  //     })
-  // });
-
-  // it('authentication user without token', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         query{
-  //           user(token: " "){
-  //             full_name
-  //             username
-  //             email
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.body.data.user).to.be.null;
-  //       done();
-  //     })
-  // });
-
-  // it('login user', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         mutation login {
-  //           login(email: "${email_test}", password: "${password_test}") {
-  //             user {
-  //               username
-  //               full_name
-  //             }
-  //             token
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.status).to.be.equal(200);
-  //       expect(res.body.data).to.be.an('object');
-  //       expect(res.body.data.login.token).to.be.a('string');
-  //       done();
-  //     })
-  // });
-
-  // it('login user with wrong email', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         mutation login {
-  //           login(email: "lala@mail.com", password: "${password_test}") {
-  //             user {
-  //               username
-  //               full_name
-  //             }
-  //             token
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.body.data.login).to.be.null;
-  //       done();
-  //     })
-  // });
-
-  // it('login user with wrong password', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         mutation login {
-  //           login(email: "${email_test}", password: "@lalalala1234Q") {
-  //             user {
-  //               username
-  //               full_name
-  //             }
-  //             token
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.body.data.login).to.be.null;
-  //       done();
-  //     })
-  // });
-
-  // it('update user', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         mutation{
-  //           updateUser(token:"${token}" full_name: "asep", email:"asep@mail.com", username:"asep44"){
-  //             full_name
-  //             username
-  //             email
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.status).to.be.equal(200);
-  //       expect(res.body.data).to.be.an('object');
-  //       done();
-  //     });
-  // });
-
-  // it('update user without token', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         mutation{
-  //           updateUser( full_name: "asep", email:"asep@mail.com", username:"asep44"){
-  //             full_name
-  //             username
-  //             email
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.body.data.updateUser).to.be.null;
-  //       done();
-  //     });
-  // });
-
-  // it('delete user', (done) => {
-  //   chai.request(app)
-  //     .post('/graphql')
-  //     .send({
-  //       query:`
-  //         mutation delete{
-  //           deleteUser(email: "${email_test}"){
-  //             _id
-  //             full_name
-  //             username
-  //             email
-  //           }
-  //         }
-  //       `
-  //     })
-  //     .end((err, res) => {
-  //       if(err) {
-  //         throw err;
-  //       };
-  //       expect(res.status).to.be.equal(200);
-  //       expect(res.body.data).to.be.an('object');
-  //       done();
-  //     });
-  // });
+  it('show products', (done) => {
+    chai.request(app)
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
+        query {
+          products {
+            _id
+            name
+            price
+            image
+            obj_url
+            obj_name
+            texture_url
+          }
+        }
+        `
+      })
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        };
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('object');
+        done();
+      });
+  });
 });

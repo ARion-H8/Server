@@ -34,7 +34,11 @@ const auth = jwt({
   credentialsRequired: false
 })
 
-mongoose.connect(`mongodb://${process.env.USERNAME}:${password}@ds213199.mlab.com:13199/arion-db`)
+if(process.env.NODE_ENV === 'test') {
+  mongoose.connect(`mongodb://${process.env.USERNAME}:${password}@ds123971.mlab.com:23971/test_arion`)
+} else {
+  mongoose.connect(`mongodb://${process.env.USERNAME}:${password}@ds213199.mlab.com:13199/arion-db`)
+}
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log('connected to mongoose')
