@@ -10,7 +10,10 @@ const productSchema = new schema({
   },
   transactions: [{
     type: schema.Types.ObjectId, ref: 'Transaction',
-  }]
+  }],
+  obj_name: String,
+  obj_url: String,
+  texture_url: String
 }, {
     timestamps: true
   })

@@ -69,12 +69,15 @@ var resolvers = {
       let product = await Product.create(newProduct)
       return product
     },
-    editProduct: async (_, { productId, name, price, image }, { user }) => {
+    editProduct: async (_, { productId, name, price, image, obj_name, obj_url, texture_url }, { user }) => {
       if (!user) throw new Error("please login first")
       let editProduct = await Product.findByIdAndUpdate(productId, {
         name,
         price,
-        image
+        image,
+        obj_name,
+        obj_url,
+        texture_url
       })
       return {
         name,
