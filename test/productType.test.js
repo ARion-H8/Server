@@ -32,5 +32,6 @@ describe('output', () => {
   });
 });
 
+
 // assert.graphQL(goodResponse, { user: 'user' })
 
