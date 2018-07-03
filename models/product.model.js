@@ -13,7 +13,7 @@ const productSchema = new schema({
   }],
   obj_name: String,
   obj_url: String,
-  texture_url: String
+  texture_url: String,
 }, {
     timestamps: true
   })
