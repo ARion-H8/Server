@@ -107,6 +107,14 @@ var resolvers = {
       })
       return cart
     },
+    deleteCartProduct: async (_, { cartId }, { user }) => {
+      if (!user) throw new Error("please login first")
+      await User.findByIdAndUpdate(user._id, {
+        $pull:{
+          cart:cartId
+        }
+      })
+    }
   }
 }
 
