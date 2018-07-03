@@ -1,6 +1,5 @@
 const User = require('../models/user.model')
 const Product = require('../models/product.model')
-const Transaction = require('../models/transaction.model')
 const Cart = require('../models/cart.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -24,13 +23,6 @@ var resolvers = {
       if (!user) throw new Error("please login first")
       let products = await Product.find()
       return products
-    },
-    transactions: async (_, args, { user }) => {
-      if (!user) throw new Error("please login first")
-      let transactions = await Transaction.find({
-        userId: user._id
-      })
-      return transactions
     }
   },
   Mutation: {

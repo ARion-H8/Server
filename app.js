@@ -33,7 +33,6 @@ const auth = jwt({
   secret: process.env.SECRET,
   credentialsRequired: false
 })
-
 if(process.env.NODE_ENV === 'test') {
   mongoose.connect(`mongodb://${process.env.USERNAME}:${password}@ds123971.mlab.com:23971/test_arion`)
 } else {
