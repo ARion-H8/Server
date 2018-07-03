@@ -37,6 +37,7 @@
     editProduct(productId: String, name: String, price: String, image: String): Product
     addCart(newCartItem: newCartItem): CartItem
     deleteCart(cartId: String): CartItem
+    deleteCartProduct(cartId:String): CartItem
     editCart(cartId: String, quantity: Int): CartItem
   }
 

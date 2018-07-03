@@ -163,9 +163,6 @@ describe('user resolvers', () => {
       })
       .end(async (err, res) => {
         expect(res.body.data.user).to.be.equal(null);
-        // await userModel.findOneAndRemove({
-        //   email:email
-        // })
         done();
       });
   });
