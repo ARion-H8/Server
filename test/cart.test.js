@@ -191,4 +191,31 @@ it('should be failed to add cart', (done) => {
         done();
       });
   })
+
+  it('should be success to delete cart', (done) => {
+    chai
+      .request(app)
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
+          mutation {
+            deleteCartProduct(
+              cartId: "${cartId}"
+            ) {
+              _id
+            }
+          }
+        `
+      })
+      .end((err, res) => {
+        if (err) {
+          throw err
+        }
+        // console.log(res)
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('object');
+        done();
+      });
+  })
 })
