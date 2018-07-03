@@ -19,22 +19,13 @@
     name: String
     price: Int
     image: String
-    transactions: [Transaction]
     obj_name: String
     obj_url: String
     texture_url: String
   }
 
-  type Transaction {
-    _id: String
-    userId: User
-    productId: Product
-    quantity: Int
-  }
-
   type Query {
     user: User
-    transactions: [Transaction]
     products: [Product]
   }
 
@@ -44,7 +35,6 @@
     addProduct(newProduct: newProduct): Product
     deleteProduct(productId: String): Product
     editProduct(productId: String, name: String, price: String, image: String): Product
-    addTransaction(newTransaction: newTransaction): Transaction
     addCart(newCartItem: newCartItem): CartItem
     deleteCart(cartId: String): CartItem
     editCart(cartId: String, quantity: Int): CartItem

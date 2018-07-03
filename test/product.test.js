@@ -16,6 +16,13 @@ const product = {
   texture_url: "https://storage.googleapis.com/storagetestupload/1530519478247pith_helmet_spec.jpg"
 }
 
+const editProduct ={
+	productId: "5b3af3ff3bba0f1145c8c8dc",
+	name: "trouser.asd",
+	price: 20000,
+	image: "https://storage.googleapis.com/logo-image/1530241730060m_trousers_02.mhclo"
+}
+
 var productId = ''
 
 describe('product resolvers', () => {
@@ -103,6 +110,7 @@ describe('product resolvers', () => {
   it('success add product', (done) => {
     chai.request(app)
       .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         query: `
         mutation {
@@ -110,11 +118,10 @@ describe('product resolvers', () => {
             name: "${product.name}",
             price: ${product.price},
             image: "${product.image}",
-            obj_name: "${product.obj_name}",
-            obj_url: "${product.obj_url}",
-            texture_url: "${product.texture_url}"
-          }) {
+          }){
             _id
+            name
+            price
           }
         }
         `
@@ -122,25 +129,27 @@ describe('product resolvers', () => {
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('object');
+        productId = res.body.data.addProduct._id
         done();
       });
   })
 
-  it('show products', (done) => {
+  it('edit products', (done) => {
     chai.request(app)
       .post('/graphql')
       .set('Authorization', `Bearer ${token}`)
       .send({
         query: `
-        query {
-          products {
-            _id
+        mutation{
+          editProduct(
+            productId: "${editProduct.productId}", 
+            name: "${editProduct.name}",
+            price: "${editProduct.price}", 
+            image: "${editProduct.image}"
+          ){
             name
             price
             image
-            obj_url
-            obj_name
-            texture_url
           }
         }
         `
@@ -149,9 +158,73 @@ describe('product resolvers', () => {
         if (err) {
           throw err;
         };
+        console.log(res.body.data.editProduct)
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('object');
+        expect(res.body.data.editProduct.name).to.be.a('string');
         done();
       });
   });
+  it('failed edit product', (done) => {
+    chai.request(app)
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
+        mutation {
+          editProduct(newProduct: {
+            id: ""
+            price: ${product.price}
+            image: "${product.image}"
+            obj_name: "${product.obj_name}"
+            obj_url: "${product.obj_url}"
+            texture_url: "${product.texture_url}"
+          }) {
+            _id
+          }
+        }
+        `
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.errors).to.be.an('array');
+        done();
+      });
+  })
+  it('success delete product', (done) => {
+    chai.request(app)
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
+        mutation {
+          deleteProduct(productId: "${productId}") {
+            _id
+          }
+        }
+        `
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        done();
+      });
+  })
+  it('failed delete product', (done) => {
+    chai.request(app)
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
+        mutation {
+          deleteProduct(productId: ${productId}) {
+            _id
+          }
+        }
+        `
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      });
+  })
 });
