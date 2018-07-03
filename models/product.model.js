@@ -14,6 +14,9 @@ const productSchema = new schema({
   obj_name: String,
   obj_url: String,
   texture_url: String,
+  texture_2: String,
+  texture_img1: String,
+  texture_img2: String
 }, {
     timestamps: true
   })
